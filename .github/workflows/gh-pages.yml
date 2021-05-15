@@ -23,9 +23,9 @@ jobs:
     - name: Publish .NET Project
       run: dotnet publish ./Source/CoWINVaccineFinder.BlazorApp/CoWINVaccineFinder.BlazorApp.csproj --configuration Release --output release
     
-    # changes the base-tag in index.html from '/' to 'CoWINVaccineFinder' to match GitHub Pages repository subdirectory
-    - name: Change base-tag in index.html from / to CoWINVaccineFinder
-      run: sed -i 's/<base href="\/" \/>/<base href="\/CoWINVaccineFinder\/" \/>/g' release/wwwroot/index.html
+    # changes the base-tag in index.html from '/' to 'cowinvaccinefinder' to match GitHub Pages repository subdirectory
+    - name: Change base-tag in index.html from / to cowinvaccinefinder
+      run: sed -i 's/<base href="\/" \/>/<base href="\/cowinvaccinefinder\/" \/>/g' release/wwwroot/index.html
 
     # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
     - name: Add .nojekyll file
