@@ -52,12 +52,13 @@ namespace CoWINVaccineFinder.ConsoleApp
                         if(DateTime.Compare(coWINUtilities.Token.ValidTo.AddMinutes(-1), DateTime.UtcNow) < 0 )
                         {
                             await coWINAuthService.GenerateMobileOTPAsync(coWINUtilities.MobileNumber, cancellationToken);
+                            Console.WriteLine();
                             Console.WriteLine("Earlier OTP expired. Enter the new OTP");
-                            Console.WriteLine("Enter otp:");
+                            Console.WriteLine("Enter OTP:");
                             await coWINAuthService.ValidateMobileOTPAsync(Console.ReadLine(), cancellationToken);
                         }
 
-                        Console.WriteLine("Searching for Vaccine at: " + DateTime.Now);
+                        Console.Write("\rSearching for Vaccine at: " + DateTime.Now);
                         var responseDto = await coWINAppointmentService.FetchSessionsByDistrictIdAndDate("581", "15-05-2021",cancellationToken);
                         List<string> availableCentres = new List<string>();
 
