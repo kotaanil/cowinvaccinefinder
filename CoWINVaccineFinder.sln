@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoWINVaccineFinder.ConsoleApp", "Source\CoWINVaccineFinder.ConsoleApp\CoWINVaccineFinder.ConsoleApp.csproj", "{73EA5209-8AC8-4DDE-B44C-B6D3B7582CD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoWINVaccineFinder.Application", "Source\CoWINVaccineFinder.Application\CoWINVaccineFinder.Application.csproj", "{2A778D55-D422-4534-B052-E733A6C9CE5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoWINVaccineFinder.Application", "Source\CoWINVaccineFinder.Application\CoWINVaccineFinder.Application.csproj", "{2A778D55-D422-4534-B052-E733A6C9CE5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoWINVaccineFinder.BlazorApp", "Source\CoWINVaccineFinder.BlazorApp\CoWINVaccineFinder.BlazorApp.csproj", "{55AC22E4-897B-4200-AC85-79A4C59FC5A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2A778D55-D422-4534-B052-E733A6C9CE5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A778D55-D422-4534-B052-E733A6C9CE5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A778D55-D422-4534-B052-E733A6C9CE5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55AC22E4-897B-4200-AC85-79A4C59FC5A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55AC22E4-897B-4200-AC85-79A4C59FC5A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55AC22E4-897B-4200-AC85-79A4C59FC5A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55AC22E4-897B-4200-AC85-79A4C59FC5A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
