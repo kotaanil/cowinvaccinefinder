@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp4
+namespace CoWINVaccineFinder.Application.DTOs
 {
-    public class ValidateMobileOTPRequestDTO
+    public class GenerateMobileOTPResponse
     {
-        public string otp { get; set; }
         public string txnId { get; set; }
     }
 }

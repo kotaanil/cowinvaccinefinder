@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp4
+namespace CoWINVaccineFinder.Application.DTOs
 {
-    public class ValidateMobileOTPResponseDTO
+    public class ValidateMobileOTPResponse
     {
         public string token { get; set; }
         public string isNewAccount { get; set; }
