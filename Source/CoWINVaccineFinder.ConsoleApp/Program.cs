@@ -49,7 +49,7 @@ namespace CoWINVaccineFinder.ConsoleApp
 
                     while (true)
                     {
-                        if(DateTime.Compare(coWINUtilities.Token.ValidTo, DateTime.Now) < 0 )
+                        if(DateTime.Compare(coWINUtilities.Token.ValidTo.AddMinutes(-1), DateTime.UtcNow) < 0 )
                         {
                             await coWINAuthService.GenerateMobileOTPAsync(coWINUtilities.MobileNumber, cancellationToken);
                             Console.WriteLine("Earlier OTP expired. Enter the new OTP");
