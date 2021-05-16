@@ -11,7 +11,7 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudGrid>
-                    <MudItem xs="12" md="6">
+                    <MudItem xs="12" md="3">
                         <MudTextField @bind-Value="HelperText1"
                                       FullWidth="false"
                                       Label=@localizer["Mobile Number"]
@@ -19,19 +19,21 @@
                                       Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem Class="d-flex align-center"
-                             xs="12" md="6">
+                             xs="12" md="3">
                         <MudButton Variant="Variant.Filled"
                                    Color="Color.Primary">GET OTP</MudButton>
                     </MudItem>
-                    <MudItem xs="12" md="6">
+                    <MudItem xs="12" md="3">
                         <MudTextField @bind-Value="HelperText2"
                                       Label="OTP"
+                                      Disabled="true"
                                       HelperText="Enter 6 digit otp"
                                       Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem Class="d-flex align-center"
-                             xs="12" md="6">
+                             xs="12" md="3">
                         <MudButton Variant="Variant.Filled"
+                                   Disabled="true"
                                    Color="Color.Primary">SUBMIT OTP</MudButton>
                     </MudItem>
                 </MudGrid>
