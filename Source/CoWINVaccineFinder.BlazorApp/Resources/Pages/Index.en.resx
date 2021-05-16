@@ -117,10 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Search" xml:space="preserve">
-    <value>Search</value>
-  </data>
-  <data name="Search Details" xml:space="preserve">
-    <value>Search Details</value>
+  <data name="Mobile Number" xml:space="preserve">
+    <value>Mobile Number</value>
   </data>
 </root>

@@ -1,37 +1,121 @@
 ﻿@page "/"
 @inject Microsoft.Extensions.Localization.IStringLocalizer<Index> localizer
 
-<MudGrid Class="justify-center">
+<MudGrid Justify="Justify.Center">
     <MudItem xs="12" sm="8" md="9">
         <MudCard Elevation="25">
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText>@localizer["User Details"]</MudText>
+                    <MudText>Login Details</MudText>
                 </CardHeaderContent>
             </MudCardHeader>
             <MudCardContent>
                 <MudGrid>
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="HelperText1"
+                                      FullWidth="false"
+                                      Label=@localizer["Mobile Number"]
+                                      HelperText="Enter 10 digit mobile number"
+                                      Variant="Variant.Outlined" />
+                    </MudItem>
+                    <MudItem Class="d-flex align-center"
+                             xs="12" md="6">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary">GET OTP</MudButton>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField @bind-Value="HelperText2"
+                                      Label="OTP"
+                                      HelperText="Enter 6 digit otp"
+                                      Variant="Variant.Outlined" />
+                    </MudItem>
+                    <MudItem Class="d-flex align-center"
+                             xs="12" md="6">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary">SUBMIT OTP</MudButton>
+                    </MudItem>
                 </MudGrid>
             </MudCardContent>
-            <MudCardActions Class="pb-4 pl-4">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" ButtonType="ButtonType.Submit">@localizer["Get OTP"]</MudButton>
-            </MudCardActions>
         </MudCard>
     </MudItem>
+
     <MudItem xs="12" sm="8" md="9">
-        <MudCard Elevation="25">
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText>@localizer["Search Details"]</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudGrid>
-                </MudGrid>
-            </MudCardContent>
-            <MudCardActions Class="pb-4 pl-4">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" ButtonType="ButtonType.Submit">@localizer["Search"]</MudButton>
-            </MudCardActions>
-        </MudCard>
+        <EditForm Model="@searchCriteriaModel" OnValidSubmit="StartSearchAsync">
+            <MudCard Elevation="25">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText>Vaccine Search Criteria</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="12" md="6">
+                            <MudAutocomplete T="string"
+                                             Label="States"
+                                             @bind-Value="value1"
+                                             SearchFunc="@SearchStates" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudAutocomplete T="string"
+                                             Label="Districts"
+                                             @bind-Value="value2"
+                                             SearchFunc="@SearchDistricts" />
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+                <MudCardActions Class="pb-4 pl-4">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Class="ml-auto"
+                               ButtonType="ButtonType.Submit">Search</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </EditForm>
     </MudItem>
 </MudGrid>
+
+@code
+{
+    SearchCriteriaModel searchCriteriaModel = new SearchCriteriaModel();
+    public string HelperText1 { get; set; }
+    public string HelperText2 { get; set; }
+    private string value1, value2;
+
+    private string[] States =
+    {
+        "Telangana", "Andhra Pradesh", "Karnataka", "Kerala",
+        "Rajasthan"
+    };
+
+    private string[] Districts =
+    {
+        "Ranga Reddy", "Medchal", "Kurnool", "Kadapa",
+        "Lingampally"
+    };
+
+    private async Task<IEnumerable<string>> SearchStates(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return States;
+        return States.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchDistricts(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return Districts;
+        return Districts.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private void StartSearchAsync()
+    {
+    }
+}
