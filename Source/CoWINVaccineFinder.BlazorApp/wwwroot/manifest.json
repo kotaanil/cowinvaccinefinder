@@ -1,6 +1,6 @@
 {
-  "name": "CoWINVaccineFinder.BlazorApp",
-  "short_name": "CoWINVaccineFinder.BlazorApp",
+  "name": "CoWINVaccineFinder",
+  "short_name": "CoWINVaccineFinder",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

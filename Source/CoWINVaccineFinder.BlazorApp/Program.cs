@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MudBlazor.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,12 @@ namespace CoWINVaccineFinder.BlazorApp
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
             builder.Services.AddMudServices();
+            builder.Services.AddLocalization(options =>
+             {
+                 options.ResourcesPath = "Resources";
+             });
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
             await builder.Build().RunAsync();
         }
     }

@@ -1,9 +1,18 @@
 ﻿@inherits LayoutComponentBase
+@inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> localizer
 
-<div class="page">
-    <div class="main">
-        <div class="content px-4">
+<MudLayout>
+    <MudAppBar Elevation="4" Color="Color.Primary">
+        <MudIcon Icon="" Size="Size.Large" ViewBox="0 0 500 500" />
+        <MudText Typo="Typo.h6" Class="ml-4">CoWINVaccineFinder</MudText>
+        <MudAppBarSpacer />
+        <MudTooltip Text="@localizer["GitHub Link"]">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/codealag/cowinvaccinefinder" Target="_blank" />
+        </MudTooltip>
+    </MudAppBar>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
             @Body
-        </div>
-    </div>
-</div>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
