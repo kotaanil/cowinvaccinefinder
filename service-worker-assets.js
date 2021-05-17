@@ -165,7 +165,7 @@
       "url": "_framework\/CoWINVaccineFinder.Application.dll"
     },
     {
-      "hash": "sha256-CmOXv9OjWiD177AaatKDaKy+V4pGuEIBA2MKVH7JpwM=",
+      "hash": "sha256-1wzsQnTL72sdoqSSwij3UZVGD1tGJOd0VIm98Yf9p6U=",
       "url": "_framework\/CoWINVaccineFinder.BlazorApp.dll"
     },
     {
@@ -341,7 +341,7 @@
       "url": "_framework\/en\/CoWINVaccineFinder.BlazorApp.resources.dll"
     },
     {
-      "hash": "sha256-kJoKuGlzzRF1n71MpvoEth+naOeDoHvnOpCY54ONBj0=",
+      "hash": "sha256-B08Djo5vJKYsjYWE3VI9KiV0pVzw8QrBylKGX+uM8wQ=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -349,5 +349,5 @@
       "url": "_framework\/blazor.webassembly.js"
     }
   ],
-  "version": "DPclHtvl"
+  "version": "7DWhjKZH"
 };
