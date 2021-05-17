@@ -1,5 +1,6 @@
 ﻿@page "/"
-@inject Microsoft.Extensions.Localization.IStringLocalizer<Index> localizer
+@inject IStringLocalizer<Index> localizer
+@inject IndexViewModel indexViewModel
 
 <MudGrid Justify="Justify.Center">
     <MudItem xs="12" sm="8" md="9">
@@ -11,38 +12,40 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudGrid>
-                    <MudItem xs="12" md="3">
-                        <MudTextField @bind-Value="HelperText1"
+                    <MudItem xs="6" md="3">
+                        <MudTextField T="string"
                                       FullWidth="false"
                                       Label=@localizer["Mobile Number"]
+                                      @bind-Value ="@indexViewModel.MobileNumber"
                                       HelperText="Enter 10 digit mobile number"
                                       Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem Class="d-flex align-center"
-                             xs="12" md="3">
+                             xs="6" md="3">
                         <MudButton Variant="Variant.Filled"
+                                   OnClick="@indexViewModel.GetOTP"
                                    Color="Color.Primary">GET OTP</MudButton>
                     </MudItem>
-                    <MudItem xs="12" md="3">
-                        <MudTextField @bind-Value="HelperText2"
+                    <MudItem xs="6" md="3">
+                        <MudTextField T="string"
                                       Label="OTP"
-                                      Disabled="true"
+                                      Disabled="@indexViewModel.OTPField"
                                       HelperText="Enter 6 digit otp"
                                       Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem Class="d-flex align-center"
-                             xs="12" md="3">
+                             xs="6" md="3">
                         <MudButton Variant="Variant.Filled"
-                                   Disabled="true"
-                                   Color="Color.Primary">SUBMIT OTP</MudButton>
+                                   Disabled="@indexViewModel.OTPButton"
+                                   OnClick="@indexViewModel.ValidateOTP"
+                                   Color="Color.Primary">VALIDATE OTP</MudButton>
                     </MudItem>
                 </MudGrid>
             </MudCardContent>
         </MudCard>
     </MudItem>
-
     <MudItem xs="12" sm="8" md="9">
-        <EditForm Model="@searchCriteriaModel" OnValidSubmit="StartSearchAsync">
+        <EditForm Model="@indexViewModel" OnValidSubmit="@indexViewModel.StartSearchAsync">
             <MudCard Elevation="25">
                 <MudCardHeader>
                     <CardHeaderContent>
@@ -54,14 +57,14 @@
                         <MudItem xs="12" md="6">
                             <MudAutocomplete T="string"
                                              Label="States"
-                                             @bind-Value="value1"
-                                             SearchFunc="@SearchStates" />
+                                             @bind-Value="@indexViewModel.StateSearchParameters"
+                                             SearchFunc="@indexViewModel.SearchStates" />
                         </MudItem>
                         <MudItem xs="12" md="6">
                             <MudAutocomplete T="string"
                                              Label="Districts"
-                                             @bind-Value="value2"
-                                             SearchFunc="@SearchDistricts" />
+                                             @bind-Value="@indexViewModel.DistrictSearchParameters"
+                                             SearchFunc="@indexViewModel.SearchDistricts" />
                         </MudItem>
                     </MudGrid>
                 </MudCardContent>
@@ -74,50 +77,37 @@
             </MudCard>
         </EditForm>
     </MudItem>
+    <MudItem xs="12" sm="8" md="9">
+        <MudCard Elevation="25">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText>Search Results</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTable Items="@indexViewModel.AvailableVaccineCenters" Hover="true" Breakpoint="Breakpoint.Sm">
+                    <HeaderContent>
+                        <MudTh>Center Name</MudTh>
+                        <MudTh>Vaccine Type</MudTh>
+                        <MudTh>Minimum Age Limit</MudTh>
+                        <MudTh>Availability</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Center Name">@context.CenterName</MudTd>
+                        <MudTd DataLabel="Vaccine Type">@context.VaccineType</MudTd>
+                        <MudTd DataLabel="Minimum Age Limit">@context.MinimumAgeLimit.</MudTd>
+                        <MudTd DataLabel="Availability">@context.Availability</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
 </MudGrid>
 
-@code
-{
-    SearchCriteriaModel searchCriteriaModel = new SearchCriteriaModel();
-    public string HelperText1 { get; set; }
-    public string HelperText2 { get; set; }
-    private string value1, value2;
+@code{
 
-    private string[] States =
+    protected override void OnInitialized()
     {
-        "Telangana", "Andhra Pradesh", "Karnataka", "Kerala",
-        "Rajasthan"
-    };
-
-    private string[] Districts =
-    {
-        "Ranga Reddy", "Medchal", "Kurnool", "Kadapa",
-        "Lingampally"
-    };
-
-    private async Task<IEnumerable<string>> SearchStates(string value)
-    {
-        // In real life use an asynchronous function for fetching data from an api.
-        await Task.Delay(5);
-
-        // if text is null or empty, show complete list
-        if (string.IsNullOrEmpty(value))
-            return States;
-        return States.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
-    }
-
-    private async Task<IEnumerable<string>> SearchDistricts(string value)
-    {
-        // In real life use an asynchronous function for fetching data from an api.
-        await Task.Delay(5);
-
-        // if text is null or empty, show complete list
-        if (string.IsNullOrEmpty(value))
-            return Districts;
-        return Districts.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
-    }
-
-    private void StartSearchAsync()
-    {
+        indexViewModel.StateHasChangedDelegate = StateHasChanged;
     }
 }

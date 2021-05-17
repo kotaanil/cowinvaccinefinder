@@ -1,3 +1,5 @@
+using CoWINVaccineFinder.Application;
+using CoWINVaccineFinder.BlazorApp.ViewModels;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,11 @@ namespace CoWINVaccineFinder.BlazorApp
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
             builder.Services.AddMudServices();
+            builder.Services.AddHttpClient<CoWINApiClient>();
+            builder.Services.AddSingleton<CoWINUtilities>();
+            builder.Services.AddSingleton<IndexViewModel>();
+            builder.Services.AddTransient<CoWINAuthService>();
+            builder.Services.AddTransient<CoWINAppointmentService>();
             builder.Services.AddLocalization(options =>
              {
                  options.ResourcesPath = "Resources";
