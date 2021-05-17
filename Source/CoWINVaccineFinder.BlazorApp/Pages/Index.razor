@@ -3,7 +3,7 @@
 @inject IndexViewModel indexViewModel
 
 <MudGrid Justify="Justify.Center">
-    <MudItem xs="12" sm="8" md="9">
+    <MudItem xs="12" sm="8" md="9" hidden="@indexViewModel.HideLoginDetails">
         <MudCard Elevation="25">
             <MudCardHeader>
                 <CardHeaderContent>
@@ -12,12 +12,12 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudGrid>
-                    <MudItem xs="6" md="3">
+                    <MudItem Class="d-flex align-center"
+                             xs="6" md="3">
                         <MudTextField T="string"
                                       FullWidth="false"
                                       Label=@localizer["Mobile Number"]
                                       @bind-Value ="@indexViewModel.MobileNumber"
-                                      HelperText="Enter 10 digit mobile number"
                                       Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem Class="d-flex align-center"
@@ -26,17 +26,18 @@
                                    OnClick="@indexViewModel.GetOTP"
                                    Color="Color.Primary">GET OTP</MudButton>
                     </MudItem>
-                    <MudItem xs="6" md="3">
+                    <MudItem Class="d-flex align-center"
+                             xs="6" md="3">
                         <MudTextField T="string"
                                       Label="OTP"
-                                      Disabled="@indexViewModel.OTPField"
-                                      HelperText="Enter 6 digit otp"
+                                      @bind-Value ="@indexViewModel.OTP"
+                                      Disabled="@indexViewModel.DisableOTPField"
                                       Variant="Variant.Outlined" />
                     </MudItem>
                     <MudItem Class="d-flex align-center"
                              xs="6" md="3">
                         <MudButton Variant="Variant.Filled"
-                                   Disabled="@indexViewModel.OTPButton"
+                                   Disabled="@indexViewModel.DisableOTPButton"
                                    OnClick="@indexViewModel.ValidateOTP"
                                    Color="Color.Primary">VALIDATE OTP</MudButton>
                     </MudItem>
@@ -44,7 +45,7 @@
             </MudCardContent>
         </MudCard>
     </MudItem>
-    <MudItem xs="12" sm="8" md="9">
+    <MudItem xs="12" sm="8" md="9" hidden ="@indexViewModel.HideSearchCriteria">
         <EditForm Model="@indexViewModel" OnValidSubmit="@indexViewModel.StartSearchAsync">
             <MudCard Elevation="25">
                 <MudCardHeader>
@@ -77,7 +78,7 @@
             </MudCard>
         </EditForm>
     </MudItem>
-    <MudItem xs="12" sm="8" md="9">
+    <MudItem xs="12" sm="8" md="9" hidden="@indexViewModel.HideSearchResults">
         <MudCard Elevation="25">
             <MudCardHeader>
                 <CardHeaderContent>

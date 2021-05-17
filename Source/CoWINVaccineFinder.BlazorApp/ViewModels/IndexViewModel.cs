@@ -13,8 +13,11 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
         private CoWINAuthService coWINAuthService;
         public IndexViewModel(CoWINAuthService coWINAuthService)
         {
-            OTPField = true;
-            OTPButton = true;
+            DisableOTPField = true;
+            DisableOTPButton = true;
+            HideLoginDetails = false;
+            HideSearchCriteria = true;
+            HideSearchResults = true;
             this.coWINAuthService = coWINAuthService;
             AvailableVaccineCenters = new List<VaccineCenter>();
             AvailableVaccineCenters.Add(new VaccineCenter()
@@ -41,8 +44,11 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
         public string OTP { get; set; }
         public string StateSearchParameters { get; set; }
         public string DistrictSearchParameters { get; set; }
-        public bool OTPField { get; set; }
-        public bool OTPButton { get; set; }
+        public bool DisableOTPField { get; set; }
+        public bool DisableOTPButton { get; set; }
+        public bool HideLoginDetails { get; set; }
+        public bool HideSearchCriteria { get; set; }
+        public bool HideSearchResults { get; set; }
 
         public List<VaccineCenter> AvailableVaccineCenters { get; set; }
 
@@ -74,14 +80,16 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
 
         public void StartSearchAsync()
         {
+            HideSearchResults = false;
+            StateHasChangedDelegate?.Invoke();
         }
 
         public async Task GetOTP()
         {
             var cancellationToken = new CancellationTokenSource().Token;
             await coWINAuthService.GenerateMobileOTPAsync(MobileNumber, cancellationToken);
-            OTPField = false;
-            OTPButton = false;
+            DisableOTPField = false;
+            DisableOTPButton = false;
             StateHasChangedDelegate?.Invoke();
         }
 
@@ -89,6 +97,9 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
         {
             var cancellationToken = new CancellationTokenSource().Token;
             await coWINAuthService.ValidateMobileOTPAsync(OTP, cancellationToken);
+            HideLoginDetails = true;
+            HideSearchCriteria = false;
+            StateHasChangedDelegate?.Invoke();
         }
     }
 }
