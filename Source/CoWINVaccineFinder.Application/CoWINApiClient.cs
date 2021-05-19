@@ -38,6 +38,35 @@ namespace CoWINVaccineFinder.Application
             }
         }
 
+        public async Task<FetchIdTypesResponse> FetchIdTypes(string token, CancellationToken cancellationToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/v2/registration/beneficiary/idTypes");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+            using (var response = await this.client.SendAsync(request, cancellationToken))
+            {
+                response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<FetchIdTypesResponse>(responseString);
+            }
+        }
+
+        public async Task<FetchGendersResponse> FetchGenders(string token, CancellationToken cancellationToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/v2/admin/location/states");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            using (var response = await this.client.SendAsync(request, cancellationToken))
+            {
+                response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<FetchGendersResponse>(responseString);
+            }
+        }
+
         public async Task<ValidateMobileOTPResponse> ValidateMobileOTPAsync(ValidateMobileOTPRequest validateMobileOTPRequest, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "api/v2/auth/validateMobileOtp");
@@ -63,6 +92,36 @@ namespace CoWINVaccineFinder.Application
                 response.EnsureSuccessStatusCode();
                 var responseString = await response.Content.ReadAsStringAsync();
                 return ResponseDto.FromJson(responseString);
+            }
+        }
+
+        public async Task<FetchStatesResponse> FetchStates(CancellationToken cancellationToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/v2/admin/location/states");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+
+            using (var response = await this.client.SendAsync(request, cancellationToken))
+            {
+                response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<FetchStatesResponse>(responseString);
+            }
+        }
+
+        public async Task<FetchDistrictsResponse> FetchDistricts(Dictionary<string,string> queryString, string token, CancellationToken cancellationToken)
+        {
+            //var requestUri = QueryHelpers.AddQueryString("api/v2/admin/location/districts", queryString);
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/v2/admin/location/districts/" + queryString.First().Value);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+            using (var response = await this.client.SendAsync(request, cancellationToken))
+            {
+                response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<FetchDistrictsResponse>(responseString);
             }
         }
 
