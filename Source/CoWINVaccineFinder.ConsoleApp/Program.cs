@@ -27,6 +27,7 @@ namespace CoWINVaccineFinder.ConsoleApp
                    services.AddSingleton<CoWINUtilities>();
                    services.AddTransient<CoWINAuthService>();
                    services.AddTransient<CoWINAppointmentService>();
+                   services.AddTransient<CoWINMetadataService>();
                }).UseConsoleLifetime().Build();
 
             Console.WriteLine("Starting CoWIN Vaccine Finder Host");
@@ -41,25 +42,56 @@ namespace CoWINVaccineFinder.ConsoleApp
                     var coWINAuthService = services.GetRequiredService<CoWINAuthService>();
                     var coWINAppointmentService = services.GetRequiredService<CoWINAppointmentService>();
                     var coWINUtilities = services.GetRequiredService<CoWINUtilities>();
+                    var coWINMetadataService = services.GetRequiredService<CoWINMetadataService>();
 
                     Console.WriteLine("Enter Mobile Number:");
-                    await coWINAuthService.GenerateMobileOTPAsync(Console.ReadLine(), cancellationToken);
+                    await coWINAuthService.GenerateMobileOTPAsync("8341983981", cancellationToken);
                     Console.WriteLine("Enter otp:");
                     await coWINAuthService.ValidateMobileOTPAsync(Console.ReadLine(), cancellationToken);
+                    var statesResponse = (await coWINMetadataService.GetStates(cancellationToken));
+                    for (int i = 0; i < statesResponse.States.Count; i++) //item in districtsResponse.States)
+                    {
+                        if (i % 3 == 0) Console.WriteLine("");
+                        var item = statesResponse.States[i];
+                        Console.Write(" " +item.StateId + " " + item.StateName);
+                    }
+                    var stateId = 0;
+                    do
+                    {
+                        Console.WriteLine("Please choose the state");
+                        int.TryParse(Console.ReadLine(), out stateId );
+                    }
+                    while (!(stateId > 0 )); //&& stateId <= statesResponse.Total)
+                    var districtsResponse = (await coWINMetadataService.GetDistricts(stateId, cancellationToken));
+                    for (int i=0; i< districtsResponse.Districts.Count; i++) //item in districtsResponse.States)
+                    {
+                        if (i % 3 == 0) Console.WriteLine("");
+                        var item = districtsResponse.Districts[i];
+                        Console.Write(" " + item.DistrictId + " " + item.DistrictName);
+                    }
+                    var districtId = 0;
+                    do
+                    {
+                        Console.WriteLine("Please choose the district");
+                        _ = int.TryParse(Console.ReadLine(), out districtId);
+                    }
+                    while (!(districtId > 0 )); //&& stateId <= districtsResponse.Total
+
+                    var gendersResponse = await coWINMetadataService.GetBeneficiaryGenders(cancellationToken);
+                    var idtypesResponse = await coWINMetadataService.GetBeneficiaryIdTypes(cancellationToken);
 
                     while (true)
                     {
-                        if(DateTime.Compare(coWINUtilities.Token.ValidTo.AddMinutes(-1), DateTime.UtcNow) < 0 )
+                        if(DateTime.Compare(coWINUtilities.Token.ValidTo, DateTime.Now) < 0 )
                         {
                             await coWINAuthService.GenerateMobileOTPAsync(coWINUtilities.MobileNumber, cancellationToken);
-                            Console.WriteLine();
                             Console.WriteLine("Earlier OTP expired. Enter the new OTP");
-                            Console.WriteLine("Enter OTP:");
+                            Console.WriteLine("Enter otp:");
                             await coWINAuthService.ValidateMobileOTPAsync(Console.ReadLine(), cancellationToken);
                         }
 
-                        Console.Write("\rSearching for Vaccine at: " + DateTime.Now);
-                        var responseDto = await coWINAppointmentService.FetchSessionsByDistrictIdAndDate("581", "15-05-2021",cancellationToken);
+                        Console.WriteLine("Searching for Vaccine at: " + DateTime.Now);
+                        var responseDto = await coWINAppointmentService.FetchSessionsByDistrictIdAndDate(districtId.ToString(), DateTime.Now.ToString("d/M/yyyy"),cancellationToken);
                         List<string> availableCentres = new List<string>();
 
                         foreach (Center center in responseDto.Centers)
