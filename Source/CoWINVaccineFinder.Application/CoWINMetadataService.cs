@@ -12,7 +12,7 @@ namespace CoWINVaccineFinder.Application
 {
     public class CoWINMetadataService
     {
-        private readonly CoWINApiClient coWINApiClient; 
+        private readonly CoWINApiClient coWINApiClient;
         private CoWINUtilities coWINUtilities;
 
         public CoWINMetadataService(CoWINApiClient coWINApiClient, CoWINUtilities utilities)
@@ -21,24 +21,24 @@ namespace CoWINVaccineFinder.Application
             this.coWINUtilities = utilities;
         }
 
-        public async Task<FetchStatesResponse> GetStates(CancellationToken cancellationToken)
+        public async Task<List<State>> GetStates(CancellationToken cancellationToken)
         {
-            return await this.coWINApiClient.FetchStates(cancellationToken);
+            var fetchStatesResponse =  await this.coWINApiClient.FetchStates(coWINUtilities.TokenText, cancellationToken);
+            return fetchStatesResponse.States;
         }
 
-        public async Task<FetchDistrictsResponse> GetDistricts(int stateID, CancellationToken cancellationToken)
+        public async Task<List<District>> GetDistricts(string stateId, CancellationToken cancellationToken)
         {
-            var queryString = new Dictionary<string, string>();
-            queryString.Add("state_id" , stateID.ToString());
-            return await this.coWINApiClient.FetchDistricts(queryString, coWINUtilities.TokenText,cancellationToken);
+            var fetchDistrictsResponse = await this.coWINApiClient.FetchDistricts(stateId, coWINUtilities.TokenText, cancellationToken);
+            return fetchDistrictsResponse.Districts;
         }
 
-        public async Task<FetchIdTypesResponse> GetBeneficiaryIdTypes( CancellationToken cancellationToken)
+        public async Task<FetchIdTypesResponse> GetBeneficiaryIdTypes(CancellationToken cancellationToken)
         {
             return await this.coWINApiClient.FetchIdTypes(coWINUtilities.TokenText, cancellationToken);
         }
 
-        public async Task<FetchGendersResponse> GetBeneficiaryGenders( CancellationToken cancellationToken)
+        public async Task<FetchGendersResponse> GetBeneficiaryGenders(CancellationToken cancellationToken)
         {
             return await this.coWINApiClient.FetchGenders(coWINUtilities.TokenText, cancellationToken);
         }

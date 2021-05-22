@@ -81,26 +81,11 @@ namespace CoWINVaccineFinder.Application
             }
         }
 
-        public async Task<ResponseDto> FetchSessionsByPinAndDate(Dictionary<string, string> queryString, string token, CancellationToken cancellationToken)
-        {
-            var requestUri = QueryHelpers.AddQueryString("api/v2/appointment/sessions/calendarByPin", queryString);
-            var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            using (var response = await this.client.SendAsync(request, cancellationToken))
-            {
-                response.EnsureSuccessStatusCode();
-                var responseString = await response.Content.ReadAsStringAsync();
-                return ResponseDto.FromJson(responseString);
-            }
-        }
-
-        public async Task<FetchStatesResponse> FetchStates(CancellationToken cancellationToken)
+        public async Task<FetchStatesResponse> FetchStates(string token, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "api/v2/admin/location/states");
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
-
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             using (var response = await this.client.SendAsync(request, cancellationToken))
             {
                 response.EnsureSuccessStatusCode();
@@ -109,13 +94,11 @@ namespace CoWINVaccineFinder.Application
             }
         }
 
-        public async Task<FetchDistrictsResponse> FetchDistricts(Dictionary<string,string> queryString, string token, CancellationToken cancellationToken)
+        public async Task<FetchDistrictsResponse> FetchDistricts(string stateId, string token, CancellationToken cancellationToken)
         {
-            //var requestUri = QueryHelpers.AddQueryString("api/v2/admin/location/districts", queryString);
-            var request = new HttpRequestMessage(HttpMethod.Get, "api/v2/admin/location/districts/" + queryString.First().Value);
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/v2/admin/location/districts/" + stateId);
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
 
             using (var response = await this.client.SendAsync(request, cancellationToken))
             {
@@ -125,7 +108,7 @@ namespace CoWINVaccineFinder.Application
             }
         }
 
-        public async Task<ResponseDto> FetchSessionsByDistrictIdAndDate(Dictionary<string, string> queryString, string token, CancellationToken cancellationToken)
+        public async Task<SessionsResponse> FetchSessionsByDistrictIdAndDate(Dictionary<string, string> queryString, string token, CancellationToken cancellationToken)
         {
             var requestUri = QueryHelpers.AddQueryString("api/v2/appointment/sessions/calendarByDistrict", queryString);
             var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
@@ -135,9 +118,22 @@ namespace CoWINVaccineFinder.Application
             {
                 response.EnsureSuccessStatusCode();
                 var responseString = await response.Content.ReadAsStringAsync();
-                return ResponseDto.FromJson(responseString);
+                return JsonConvert.DeserializeObject<SessionsResponse>(responseString);
+            }
+        }
+
+        public async Task<SessionsResponse> FetchSessionsByPinAndDate(Dictionary<string, string> queryString, string token, CancellationToken cancellationToken)
+        {
+            var requestUri = QueryHelpers.AddQueryString("api/v2/appointment/sessions/calendarByPin", queryString);
+            var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            using (var response = await this.client.SendAsync(request, cancellationToken))
+            {
+                response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<SessionsResponse>(responseString);
             }
         }
     }
-
 }
