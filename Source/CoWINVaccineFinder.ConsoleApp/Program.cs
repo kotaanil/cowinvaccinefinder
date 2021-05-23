@@ -48,11 +48,11 @@ namespace CoWINVaccineFinder.ConsoleApp
                     await coWINAuthService.GenerateMobileOTPAsync("8341983981", cancellationToken);
                     Console.WriteLine("Enter otp:");
                     await coWINAuthService.ValidateMobileOTPAsync(Console.ReadLine(), cancellationToken);
-                    var statesResponse = (await coWINMetadataService.GetStates(cancellationToken));
-                    for (int i = 0; i < statesResponse.States.Count; i++) //item in districtsResponse.States)
+                    var states = (await coWINMetadataService.GetStates(cancellationToken));
+                    for (int i = 0; i < states.Count; i++) //item in districtsResponse.States)
                     {
                         if (i % 3 == 0) Console.WriteLine("");
-                        var item = statesResponse.States[i];
+                        var item = states[i];
                         Console.Write(" " +item.StateId + " " + item.StateName);
                     }
                     var stateId = 0;
@@ -62,11 +62,11 @@ namespace CoWINVaccineFinder.ConsoleApp
                         int.TryParse(Console.ReadLine(), out stateId );
                     }
                     while (!(stateId > 0 )); //&& stateId <= statesResponse.Total)
-                    var districtsResponse = (await coWINMetadataService.GetDistricts(stateId, cancellationToken));
-                    for (int i=0; i< districtsResponse.Districts.Count; i++) //item in districtsResponse.States)
+                    var districts = (await coWINMetadataService.GetDistricts(stateId.ToString(), cancellationToken));
+                    for (int i=0; i< districts.Count; i++) //item in districtsResponse.States)
                     {
                         if (i % 3 == 0) Console.WriteLine("");
-                        var item = districtsResponse.Districts[i];
+                        var item = districts[i];
                         Console.Write(" " + item.DistrictId + " " + item.DistrictName);
                     }
                     var districtId = 0;

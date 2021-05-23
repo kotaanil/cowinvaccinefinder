@@ -27,7 +27,10 @@ namespace CoWINVaccineFinder.Application
             set 
             {
                 tokenText = value;
-                Token = new JwtSecurityTokenHandler().ReadToken(tokenText) as JwtSecurityToken;
+                if (tokenText != null)
+                    Token = new JwtSecurityTokenHandler().ReadToken(tokenText) as JwtSecurityToken;
+                else
+                    Token = null;
             }
         }
 

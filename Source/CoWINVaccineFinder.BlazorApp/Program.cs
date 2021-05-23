@@ -25,6 +25,7 @@ namespace CoWINVaccineFinder.BlazorApp
             builder.Services.AddSingleton<CoWINUtilities>();
             builder.Services.AddSingleton<IndexViewModel>();
             builder.Services.AddTransient<CoWINAuthService>();
+            builder.Services.AddTransient<CoWINMetadataService>();
             builder.Services.AddTransient<CoWINAppointmentService>();
             builder.Services.AddLocalization(options =>
              {
