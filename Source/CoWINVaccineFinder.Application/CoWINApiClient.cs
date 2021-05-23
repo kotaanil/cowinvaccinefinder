@@ -135,5 +135,18 @@ namespace CoWINVaccineFinder.Application
                 return JsonConvert.DeserializeObject<SessionsResponse>(responseString);
             }
         }
+
+        public async Task<FetchBeneficiariesResponse> FetchBeneficiaries(string token, CancellationToken cancellationToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/v2/appointment/beneficiaries");
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            using (var response = await this.client.SendAsync(request, cancellationToken))
+            {
+                response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<FetchBeneficiariesResponse>(responseString);
+            }
+        }
     }
 }

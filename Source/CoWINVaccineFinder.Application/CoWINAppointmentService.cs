@@ -35,5 +35,12 @@ namespace CoWINVaccineFinder.Application
 
             return await coWINApiClient.FetchSessionsByDistrictIdAndDate(queryString, coWINUtilities.TokenText, cancellationToken);
         }
+
+        public async Task<List<Beneficiary>> FetchBeneficiaries(CancellationToken cancellationToken)
+        {
+            var fetchBeneficiaryResponse =  await coWINApiClient.FetchBeneficiaries(
+                coWINUtilities.TokenText, cancellationToken);
+            return fetchBeneficiaryResponse.Beneficiaries;
+        }
     }
 }

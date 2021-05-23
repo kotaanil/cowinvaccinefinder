@@ -54,7 +54,22 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudGrid>
-
+                    <MudItem Class="d-flex align-center"
+                             xs="12" md="3">
+                        <MudElement>
+                            Token Validity:
+                        </MudElement>
+                    </MudItem>
+                    <MudItem Class="my-7"
+                             xs="12" md="9">
+                        <MudProgressLinear Color="Color.Primary" Value="@indexViewModel.TokenLifeTime" />
+                    </MudItem>
+                    <MudItem Class="d-flex align-bottom"
+                             xs="6" md="3">
+                        <MudButton Variant="Variant.Filled"
+                                   OnClick="@indexViewModel.LogOut"
+                                   Color="Color.Primary">LOGOUT</MudButton>
+                    </MudItem>
                 </MudGrid>
             </MudCardContent>
         </MudCard>
@@ -69,6 +84,20 @@
                 </MudCardHeader>
                 <MudCardContent>
                     <MudGrid>
+                        <MudItem xs="12" md="12">
+                            <MudTable Items="@indexViewModel.Beneficiaries" Context="beneficiaryContext" Hover="true" Breakpoint="Breakpoint.Sm">
+                                <HeaderContent>
+                                    <MudTh>Beneficiary Name</MudTh>
+                                    <MudTh>Photo Id</MudTh>
+                                    <MudTh>Id Number</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd DataLabel="Beneficiary Name">@beneficiaryContext.Name</MudTd>
+                                    <MudTd DataLabel="Photo Id">@beneficiaryContext.PhotoId</MudTd>
+                                    <MudTd DataLabel="Id Number">@beneficiaryContext.IdNumber</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </MudItem>
                         <MudItem xs="12" md="6">
                             <MudAutocomplete T="string"
                                              Label="States"
@@ -80,6 +109,14 @@
                                              Label="Districts"
                                              @bind-Value="@indexViewModel.District"
                                              SearchFunc="@indexViewModel.SearchDistricts" />
+                        </MudItem>
+                        <MudItem xs="6" md="3">
+                            <MudCheckBox @bind-Checked="@indexViewModel.KeepMeLoggedIn"
+                                         Label="Covaxin"></MudCheckBox>
+                        </MudItem>
+                        <MudItem xs="6" md="3">
+                            <MudCheckBox @bind-Checked="@indexViewModel.KeepMeLoggedIn"
+                                         Label="Covishield"></MudCheckBox>
                         </MudItem>
                     </MudGrid>
                 </MudCardContent>
@@ -112,6 +149,8 @@
                         <MudTd DataLabel="Vaccine Type">@context.VaccineType</MudTd>
                         <MudTd DataLabel="Minimum Age Limit">@context.MinimumAgeLimit.</MudTd>
                         <MudTd DataLabel="Availability">@context.Availability</MudTd>
+                        <MudTd DataLabel="Availability Dose 1">@context.AvailabilityDose1</MudTd>
+                        <MudTd DataLabel="Availability Dose 2">@context.AvailabilityDose2</MudTd>
                     </RowTemplate>
                 </MudTable>
             </MudCardContent>

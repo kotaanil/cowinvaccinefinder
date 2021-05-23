@@ -33,14 +33,18 @@ namespace CoWINVaccineFinder.Application
             return fetchDistrictsResponse.Districts;
         }
 
-        public async Task<FetchIdTypesResponse> GetBeneficiaryIdTypes(CancellationToken cancellationToken)
+        public async Task<List<IdType>> GetBeneficiaryIdTypes(CancellationToken cancellationToken)
         {
-            return await this.coWINApiClient.FetchIdTypes(coWINUtilities.TokenText, cancellationToken);
+            var fetchIdTypesResponse = await  this.coWINApiClient.FetchIdTypes(
+                coWINUtilities.TokenText, cancellationToken);
+            return fetchIdTypesResponse.Types;
         }
 
-        public async Task<FetchGendersResponse> GetBeneficiaryGenders(CancellationToken cancellationToken)
+        public async Task<List<Gender>> GetBeneficiaryGenders(CancellationToken cancellationToken)
         {
-            return await this.coWINApiClient.FetchGenders(coWINUtilities.TokenText, cancellationToken);
+            var fetchGendersResponse =  await this.coWINApiClient.FetchGenders(
+                coWINUtilities.TokenText, cancellationToken);
+            return fetchGendersResponse.Genders;
         }
     }
 }

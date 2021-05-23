@@ -14,9 +14,11 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
         private CoWINAuthService coWINAuthService;
         private CoWINMetadataService coWINMetadataService;
         private CoWINAppointmentService coWINAppointmentService;
+        private CoWINUtilities coWINUtilities;
         public IndexViewModel(CoWINAuthService coWINAuthService, 
             CoWINMetadataService coWINMetadataService, 
-            CoWINAppointmentService coWINAppointmentService)
+            CoWINAppointmentService coWINAppointmentService,
+            CoWINUtilities coWINUtilities)
         {
             DisableOTPField = true;
             DisableOTPButton = true;
@@ -27,7 +29,10 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
             this.coWINAuthService = coWINAuthService;
             this.coWINMetadataService = coWINMetadataService;
             this.coWINAppointmentService = coWINAppointmentService;
+            this.coWINUtilities = coWINUtilities;
             AvailableVaccineCenters = new List<VaccineCenter>();
+            Beneficiaries = new List<Models.Beneficiary>();
+            TokenLifeTime = 100;
         }
 
         public Action StateHasChangedDelegate { get; set; }
@@ -35,19 +40,18 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
         public string District { get; set; }
         public string MobileNumber { get; set; }
         public string OTP { get; set; }
+        public bool KeepMeLoggedIn { get; set; }
         public bool DisableOTPField { get; set; }
         public bool DisableOTPButton { get; set; }
         public bool HideLoginDetails { get; set; }
         public bool HideLogoutDetails { get; set; }
         public bool HideSearchCriteria { get; set; }
         public bool HideSearchResults { get; set; }
-
+        public int TokenLifeTime { get; set; }
         public List<VaccineCenter> AvailableVaccineCenters { get; set; }
-
+        public List<Models.Beneficiary> Beneficiaries { get; set; }
         public List<string> States { get; set; }
-
-        private List<string> Districts { get; set; }
-
+        public List<string> Districts { get; set; }
         public List<State> StatesDTO { get; set; }
         public List<District> DistrictsDTO { get; set; }
 
@@ -81,6 +85,8 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
             var sessionsResponse = await coWINAppointmentService.FetchSessionsByDistrictIdAndDate(
                 DistrictsDTO.Where(x => x.DistrictName == District).FirstOrDefault().DistrictId.ToString(), date, cancellationToken);
 
+            
+            
             foreach (var center in sessionsResponse.Centers)
             {
                 if (center != null)
@@ -92,6 +98,8 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
                             var vaccineCenter = new VaccineCenter();
                             vaccineCenter.CenterName = center.Name;
                             vaccineCenter.Availability = session.AvailableCapacity;
+                            vaccineCenter.AvailabilityDose1 = session.AvailableCapacityDose1;
+                            vaccineCenter.AvailabilityDose2 = session.AvailableCapacityDose2;
                             vaccineCenter.MinimumAgeLimit = session.MinAgeLimit;
                             vaccineCenter.VaccineType = session.Vaccine;
                             AvailableVaccineCenters.Add(vaccineCenter);
@@ -118,9 +126,36 @@ namespace CoWINVaccineFinder.BlazorApp.ViewModels
         {
             var cancellationToken = new CancellationTokenSource().Token;
             await coWINAuthService.ValidateMobileOTPAsync(OTP, cancellationToken);
+            var beneficiaryDTOList = await coWINAppointmentService.FetchBeneficiaries(cancellationToken);
+            
+            if(beneficiaryDTOList != null)
+            {
+                foreach (var beneficiaryDTO in beneficiaryDTOList)
+                {
+                    if(beneficiaryDTO != null)
+                    {
+                        var beneficiary = new Models.Beneficiary();
+                        beneficiary.Name = beneficiaryDTO.Name;
+                        beneficiary.PhotoId = beneficiaryDTO.PhotoIdType;
+                        beneficiary.IdNumber = beneficiaryDTO.PhotoIdNumber;
+                        Beneficiaries.Add(beneficiary);
+                    }
+                }
+            }
+
             HideLoginDetails = true;
             HideLogoutDetails = false;
             HideSearchCriteria = false;
+            StateHasChangedDelegate?.Invoke();
+        }
+
+        public void LogOut()
+        {
+            coWINUtilities.TokenText = null;
+            HideLoginDetails = false;
+            HideLogoutDetails = true;
+            HideSearchCriteria = true;
+            HideSearchResults = true;
             StateHasChangedDelegate?.Invoke();
         }
     }

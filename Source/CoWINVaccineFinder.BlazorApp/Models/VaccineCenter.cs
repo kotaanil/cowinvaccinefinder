@@ -11,5 +11,7 @@ namespace CoWINVaccineFinder.BlazorApp.Models
         public string VaccineType { get; set; }
         public long MinimumAgeLimit { get; set; }
         public long Availability { get; set; }
+        public long AvailabilityDose1 { get; set; }
+        public long AvailabilityDose2 { get; set; }
     }
 }

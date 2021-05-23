@@ -15,6 +15,12 @@ namespace CoWINVaccineFinder.Application.DTOs
         [JsonProperty("available_capacity")]
         public long AvailableCapacity { get; set; }
 
+        [JsonProperty("available_capacity_dose1")]
+        public long AvailableCapacityDose1 { get; set; }
+
+        [JsonProperty("available_capacity_dose2")]
+        public long AvailableCapacityDose2 { get; set; }
+
         [JsonProperty("min_age_limit")]
         public long MinAgeLimit { get; set; }
 
