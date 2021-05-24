@@ -18,22 +18,46 @@ namespace CoWINVaccineFinder.Application
             this.coWINUtilities = utilities;
         }
 
-        public async Task<SessionsResponse> FetchSessionsByPinAndDate(string pincode,string date, CancellationToken cancellationToken)
+        public async Task<List<Center>> FetchSessionsByPinAndDate(string pincode, int noOfWeeks, CancellationToken cancellationToken)
         {
+            if (noOfWeeks < 0)
+                throw new Exception("Invalid number of weeks specified");
+
             var queryString = new Dictionary<string, string>();
             queryString.Add("pincode", pincode);
-            queryString.Add("date", date);
-
-            return await coWINApiClient.FetchSessionsByPinAndDate(queryString, coWINUtilities.TokenText, cancellationToken);
+            var centers = new List<Center>();
+            for (int i = 0; i < noOfWeeks; i++)
+            {
+                if (queryString.ContainsKey("date"))
+                    queryString.Add("date", DateTime.Today.AddDays(i * 7).ToString("dd-MM-yyyy"));
+                else
+                    queryString["date"] = DateTime.Today.AddDays(i * 7).ToString("dd-MM-yyyy");
+                var response = await coWINApiClient.FetchSessionsByPinAndDate(queryString, coWINUtilities.TokenText, cancellationToken);
+                if(response.Centers != null)
+                    centers.AddRange(response.Centers);
+            }
+            return centers;
         }
 
-        public async Task<SessionsResponse> FetchSessionsByDistrictIdAndDate(string districtId, string date, CancellationToken cancellationToken)
+        public async Task<List<Center>> FetchSessionsByDistrictIdAndDate(string districtId, int noOfWeeks, CancellationToken cancellationToken)
         {
+            if (noOfWeeks < 0)
+                throw new Exception("Invalid number of weeks specified");
+
             var queryString = new Dictionary<string, string>();
             queryString.Add("district_id", districtId);
-            queryString.Add("date", date);
-
-            return await coWINApiClient.FetchSessionsByDistrictIdAndDate(queryString, coWINUtilities.TokenText, cancellationToken);
+            var centers = new List<Center>();
+            for (int i = 0; i < noOfWeeks; i++)
+            {
+                if (!queryString.ContainsKey("date"))
+                    queryString.Add("date", DateTime.Today.AddDays(i * 7).ToString("d/M/yyyy"));
+                else
+                    queryString["date"] = DateTime.Today.AddDays(i * 7).ToString("d/M/yyyy");
+                var response = await coWINApiClient.FetchSessionsByDistrictIdAndDate(queryString, coWINUtilities.TokenText, cancellationToken);
+                if (response.Centers != null)
+                    centers.AddRange(response.Centers);
+            }
+            return centers;
         }
 
         public async Task<List<Beneficiary>> FetchBeneficiaries(CancellationToken cancellationToken)

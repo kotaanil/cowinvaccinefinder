@@ -91,10 +91,10 @@ namespace CoWINVaccineFinder.ConsoleApp
                         }
 
                         Console.WriteLine("Searching for Vaccine at: " + DateTime.Now);
-                        var responseDto = await coWINAppointmentService.FetchSessionsByDistrictIdAndDate(districtId.ToString(), DateTime.Now.ToString("d/M/yyyy"),cancellationToken);
+                        var centers = await coWINAppointmentService.FetchSessionsByDistrictIdAndDate(districtId.ToString(),6,cancellationToken);
                         List<string> availableCentres = new List<string>();
 
-                        foreach (Center center in responseDto.Centers)
+                        foreach (Center center in centers)
                         {
                             foreach (Session session in center.Sessions)
                             {
